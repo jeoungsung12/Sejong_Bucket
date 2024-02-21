@@ -24,7 +24,7 @@ class ReservationViewController : UIViewController {
     //학과 타이틀
     private let departLabel : UILabel = {
         let label = UILabel()
-        label.text = "시각디자인학과"
+        label.text = "-"
         label.textColor = .pointColor
         label.font = UIFont.boldSystemFont(ofSize: 25)
         label.backgroundColor = .white
@@ -44,7 +44,7 @@ class ReservationViewController : UIViewController {
     //예약가능 시간
     private let reservLabel : UILabel = {
         let label = UILabel()
-        label.text = "2023.09.08(10:00) ~ 2023.09.10(18:00)"
+        label.text = "-"
         label.textColor = .gray
         label.textAlignment = .left
         label.font = UIFont.boldSystemFont(ofSize: 15)
@@ -93,7 +93,6 @@ extension ReservationViewController {
         self.view.addSubview(reservLabel)
         self.view.addSubview(refreshBtn)
         self.view.addSubview(loadingIndicator)
-//        test()
         self.view.addSubview(lockerScrollView)
         self.view.addSubview(reservBtn)
         departLabel.snp.makeConstraints { make in
@@ -118,13 +117,13 @@ extension ReservationViewController {
             make.top.equalTo(lockerLabel.snp.bottom).offset(25)
         }
         loadingIndicator.snp.makeConstraints { make in
-            make.top.equalTo(refreshBtn.snp.bottom).offset((50))
+            make.top.equalTo(refreshBtn.snp.bottom).offset((30))
             make.leading.trailing.equalToSuperview().inset(0)
         }
         lockerScrollView.snp.makeConstraints { make in
             make.top.equalTo(loadingIndicator.snp.bottom).offset(0)
             make.leading.trailing.equalToSuperview().inset(0)
-            make.height.equalToSuperview().dividedBy(2.3)
+            make.height.equalToSuperview().dividedBy(2.5)
         }
         reservBtn.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(30)
@@ -133,46 +132,39 @@ extension ReservationViewController {
         }
         self.loadingIndicator.startAnimating()
     }
-    private func test() {
-        let Btn = UIButton()
-        Btn.backgroundColor = .black
-        lockerScrollView.addSubview(Btn)
-        Btn.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview().inset(0)
-        }
-        DispatchQueue.main.async{
-            self.loadingIndicator.stopAnimating()
-        }
-    }
-    private func displayLockers(_ lockersInfo: [LockerInfo]) {
+    private func displayLockers(_ lockersInfo: LockerInfo) {
+        self.departLabel.text = lockersInfo.locker?.name
+        let start : String = lockersInfo.locker?.startReservationTime ?? ""
+        let end : String = lockersInfo.locker?.endReservationTime ?? ""
+        self.reservLabel.text = start + end
         let verticalStack = UIStackView()
         verticalStack.axis = .vertical
         verticalStack.spacing = 10
+        guard let totalRowString = lockersInfo.locker?.totalRow, let totalRowInt = Int(totalRowString) else { return }
+        guard let totalColumnString = lockersInfo.locker?.totalColumn, let totalColumnInt = Int(totalColumnString) else { return }
         var index = 0
-        for lockerInfo in lockersInfo {
+        for _ in 0..<totalRowInt {
             let horizontalStack = UIStackView()
             horizontalStack.axis = .horizontal
             horizontalStack.spacing = 10
             
-            for lockerDetail in lockerInfo.lockerDetail {
+            for _ in 0..<totalColumnInt {
                 let lockerButton = UIButton(type: .system)
-                let lockerTitle = "\(lockerDetail.row_num)-\(lockerDetail.column_num)"
+                let lockerTitle = "\(lockersInfo.lockerDetail[index].column_num)-\(lockersInfo.lockerDetail[index].row_num)"
                 lockerButton.setTitle(lockerTitle, for: .normal)
-                lockerButton.backgroundColor = lockerDetail.status == "NON_RESERVED" ? .red : .lightGray
-                lockerButton.tag = lockerDetail.id
+                lockerButton.backgroundColor = lockersInfo.lockerDetail[index].status == "NON_RESERVED" ? .lightGray : .red
+                lockerButton.tag = lockersInfo.lockerDetail[index].id
                 lockerButton.layer.cornerRadius = 10
-                lockerButton.snp.makeConstraints { make in make.width.height.equalTo(60) }
+                lockerButton.snp.makeConstraints { make in make.width.height.equalTo(70) }
                 lockerButton.setTitleColor(.black, for: .normal)
                 horizontalStack.addArrangedSubview(lockerButton)
+                index += 1
             }
-            print("사물함 갯수 \(index)")
-            index += 1
             verticalStack.addArrangedSubview(horizontalStack)
         }
         lockerScrollView.addSubview(verticalStack)
         verticalStack.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview().offset(-10)
-            make.trailing.top.equalToSuperview().offset(10)
+            make.trailing.top.leading.bottom.equalToSuperview().inset(10)
         }
         DispatchQueue.main.async{
             self.loadingIndicator.stopAnimating()
@@ -186,12 +178,28 @@ extension ReservationViewController {
         reservationViewModel.LockerResult
             .observe(on: MainScheduler.instance)
             .subscribe { result in
-            if let lockerResult = result.element?.result {
-                if let lockersInfo = lockerResult.lockersInfo {
-                    self.displayLockers(lockersInfo)
+                if let lockerResult = result.element?.result {
+                    if let lockersInfo = lockerResult.lockersInfo?.last {
+                        self.displayLockers(lockersInfo)
+                    }
                 }
             }
-        }
         .disposed(by: disposeBag)
+        refreshBtn.rx.tap
+            .subscribe(onNext: { _ in
+                self.loadingIndicator.startAnimating()
+                self.reservationViewModel.LockerInquiry.onNext(())
+                self.reservationViewModel.LockerResult
+                    .observe(on: MainScheduler.instance)
+                    .subscribe { result in
+                        if let lockerResult = result.element?.result {
+                            if let lockersInfo = lockerResult.lockersInfo?.last {
+                            self.displayLockers(lockersInfo)
+                        }
+                    }
+                    }
+                    .disposed(by: self.disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
 }
