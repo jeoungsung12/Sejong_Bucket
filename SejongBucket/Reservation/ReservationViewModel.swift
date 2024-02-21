@@ -12,6 +12,8 @@ class ReservationViewModel {
     private let disposeBag = DisposeBag()
     let LockerInquiry = PublishSubject<Void>()
     let LockerResult : PublishSubject<LockerInquiryModel> = PublishSubject()
+    let ReservTrigger = PublishSubject<LockerRequestModel>()
+    let ReservResult : PublishSubject<LockerResultModel> = PublishSubject()
     init() {
         setBinding()
     }
@@ -23,6 +25,14 @@ class ReservationViewModel {
                 }
         }
         .bind(to: LockerResult)
+        .disposed(by: disposeBag)
+        ReservTrigger.flatMapLatest { lockerId in
+            return ReservLockerService.reservLocker(lockerId: lockerId)
+                .catch { error in
+                    Observable.empty()
+                }
+        }
+        .bind(to: ReservResult)
         .disposed(by: disposeBag)
     }
 }

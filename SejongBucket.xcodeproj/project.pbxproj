@@ -74,6 +74,9 @@
 		E4E195832B849476008EE3D7 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = E4E195822B849476008EE3D7 /* RxRelay */; };
 		E4E195852B849476008EE3D7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E4E195842B849476008EE3D7 /* RxSwift */; };
 		E4E195882B849481008EE3D7 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E4E195872B849481008EE3D7 /* Alamofire */; };
+		E4FF8DBB2B86477100FDBF85 /* LockerRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FF8DBA2B86477100FDBF85 /* LockerRequestModel.swift */; };
+		E4FF8DBD2B864A1D00FDBF85 /* LockerResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FF8DBC2B864A1D00FDBF85 /* LockerResultModel.swift */; };
+		E4FF8DC02B864A9B00FDBF85 /* ReservLockerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FF8DBF2B864A9B00FDBF85 /* ReservLockerService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -140,6 +143,9 @@
 		E4E195712B8493AB008EE3D7 /* DepartProduceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartProduceService.swift; sourceTree = "<group>"; };
 		E4E195752B8493D1008EE3D7 /* DetailDepartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDepartService.swift; sourceTree = "<group>"; };
 		E4E195772B849427008EE3D7 /* DetailDepartProduceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDepartProduceService.swift; sourceTree = "<group>"; };
+		E4FF8DBA2B86477100FDBF85 /* LockerRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerRequestModel.swift; sourceTree = "<group>"; };
+		E4FF8DBC2B864A1D00FDBF85 /* LockerResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerResultModel.swift; sourceTree = "<group>"; };
+		E4FF8DBF2B864A9B00FDBF85 /* ReservLockerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservLockerService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -393,6 +399,8 @@
 			isa = PBXGroup;
 			children = (
 				E4E195212B849127008EE3D7 /* LockerInquiryModel.swift */,
+				E4FF8DBA2B86477100FDBF85 /* LockerRequestModel.swift */,
+				E4FF8DBC2B864A1D00FDBF85 /* LockerResultModel.swift */,
 			);
 			path = Reservation;
 			sourceTree = "<group>";
@@ -603,6 +611,7 @@
 		E4E195642B849348008EE3D7 /* Locker */ = {
 			isa = PBXGroup;
 			children = (
+				E4FF8DBE2B864A8B00FDBF85 /* Reserv */,
 				E4E195682B84935F008EE3D7 /* Create */,
 				E4E195652B849352008EE3D7 /* Inquiry */,
 			);
@@ -674,6 +683,14 @@
 				E4E195752B8493D1008EE3D7 /* DetailDepartService.swift */,
 			);
 			path = DetailDepartInquiry;
+			sourceTree = "<group>";
+		};
+		E4FF8DBE2B864A8B00FDBF85 /* Reserv */ = {
+			isa = PBXGroup;
+			children = (
+				E4FF8DBF2B864A9B00FDBF85 /* ReservLockerService.swift */,
+			);
+			path = Reserv;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -775,6 +792,7 @@
 				E4E194F32B848F5A008EE3D7 /* FeedBackViewController.swift in Sources */,
 				E4E194DF2B848E82008EE3D7 /* UserInfoTableViewCell.swift in Sources */,
 				E4E1955B2B8492C2008EE3D7 /* ReissueService.swift in Sources */,
+				E4FF8DC02B864A9B00FDBF85 /* ReservLockerService.swift in Sources */,
 				E4E1952F2B849182008EE3D7 /* ReissueModel.swift in Sources */,
 				E4E195672B849359008EE3D7 /* InquiryLockerService.swift in Sources */,
 				E4E194DD2B848E76008EE3D7 /* PaymentTableViewCell.swift in Sources */,
@@ -791,7 +809,9 @@
 				E4E195502B84925D008EE3D7 /* DetailDepartServiceModel.swift in Sources */,
 				E4E195092B849021008EE3D7 /* DetailDepartViewModel.swift in Sources */,
 				E4E195622B8492FF008EE3D7 /* LoginService.swift in Sources */,
+				E4FF8DBD2B864A1D00FDBF85 /* LockerResultModel.swift in Sources */,
 				E4E195442B849211008EE3D7 /* DetailProduceModel.swift in Sources */,
+				E4FF8DBB2B86477100FDBF85 /* LockerRequestModel.swift in Sources */,
 				E4E1954A2B849236008EE3D7 /* DepartInquiryModel.swift in Sources */,
 				E4E195782B849427008EE3D7 /* DetailDepartProduceService.swift in Sources */,
 				E4E195722B8493AB008EE3D7 /* DepartProduceService.swift in Sources */,

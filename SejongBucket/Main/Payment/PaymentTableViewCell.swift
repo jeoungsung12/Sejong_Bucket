@@ -29,6 +29,8 @@ class PaymentTableViewCell : UITableViewCell {
         btn.layer.cornerRadius = 10
         btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         btn.backgroundColor = .shadowColor
+        btn.layer.borderColor = UIColor.pointColor.cgColor
+        btn.layer.borderWidth = 1
         return btn
     }()
     private let bankText : UITextView = {

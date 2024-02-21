@@ -14,6 +14,7 @@ import RxCocoa
 class ReservationViewController : UIViewController {
     private let disposeBag = DisposeBag()
     private let reservationViewModel = ReservationViewModel()
+    private var lockerRequestModel = LockerRequestModel(lockerDetailId: 0)
     //로딩인디케이터
     private let loadingIndicator : UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -152,9 +153,10 @@ extension ReservationViewController {
                 let lockerButton = UIButton(type: .system)
                 let lockerTitle = "\(lockersInfo.lockerDetail[index].column_num)-\(lockersInfo.lockerDetail[index].row_num)"
                 lockerButton.setTitle(lockerTitle, for: .normal)
-                lockerButton.backgroundColor = lockersInfo.lockerDetail[index].status == "NON_RESERVED" ? .lightGray : .red
+                lockerButton.backgroundColor = lockersInfo.lockerDetail[index].status == "NON_RESERVED" ? .lightGray : .white
                 lockerButton.tag = lockersInfo.lockerDetail[index].id
                 lockerButton.layer.cornerRadius = 10
+                lockerButton.addTarget(self, action: #selector(lockerButtonTapped(_:)), for: .touchUpInside)
                 lockerButton.snp.makeConstraints { make in make.width.height.equalTo(70) }
                 lockerButton.setTitleColor(.black, for: .normal)
                 horizontalStack.addArrangedSubview(lockerButton)
@@ -187,6 +189,7 @@ extension ReservationViewController {
         .disposed(by: disposeBag)
         refreshBtn.rx.tap
             .subscribe(onNext: { _ in
+                self.lockerScrollView.subviews.forEach { $0.removeFromSuperview() }
                 self.loadingIndicator.startAnimating()
                 self.reservationViewModel.LockerInquiry.onNext(())
                 self.reservationViewModel.LockerResult
@@ -201,5 +204,34 @@ extension ReservationViewController {
                     .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
+        reservBtn.rx.tap
+            .subscribe(onNext: { _ in
+                self.reservationViewModel.ReservTrigger.onNext(self.lockerRequestModel)
+                self.loadingIndicator.startAnimating()
+            })
+            .disposed(by: disposeBag)
+        reservationViewModel.ReservResult.subscribe { result in
+            if result.element?.status == 200 {
+                if let data = result.element?.result {
+                    self.Alert(result: data)
+                }else{ }
+            }else{
+                //에러처리
+            }
+        }
+        .disposed(by: disposeBag)
+    }
+    @objc func lockerButtonTapped(_ sender: UIButton) {
+        sender.backgroundColor = .keyColor
+        let lockerDetailId = sender.tag
+        lockerRequestModel = LockerRequestModel(lockerDetailId: lockerDetailId)
+    }
+    private func Alert(result : reservData) {
+        let Alert = UIAlertController(title: "사물함 예약 완료", message: "\(result.studentNum)님 \(result.lockerName) \(result.lockerDetailNum)번 예약이 완료되었습니다.", preferredStyle: .alert)
+        let OK = UIAlertAction(title: "확인", style: .default) { _ in
+            self.loadingIndicator.stopAnimating()
+        }
+        Alert.addAction(OK)
+        present(Alert, animated: true)
     }
 }
