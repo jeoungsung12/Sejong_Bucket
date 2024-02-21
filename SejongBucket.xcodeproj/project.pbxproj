@@ -40,7 +40,7 @@
 		E4E195172B84909D008EE3D7 /* LockerManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E195162B84909D008EE3D7 /* LockerManagementViewModel.swift */; };
 		E4E1951B2B8490D0008EE3D7 /* Color + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E1951A2B8490D0008EE3D7 /* Color + Extension.swift */; };
 		E4E1951F2B84910D008EE3D7 /* ErrorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E1951E2B84910D008EE3D7 /* ErrorModel.swift */; };
-		E4E195222B849127008EE3D7 /* Locker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E195212B849127008EE3D7 /* Locker.swift */; };
+		E4E195222B849127008EE3D7 /* LockerInquiryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E195212B849127008EE3D7 /* LockerInquiryModel.swift */; };
 		E4E195272B849145008EE3D7 /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E195262B849145008EE3D7 /* UserInfoModel.swift */; };
 		E4E195292B849150008EE3D7 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E195282B849150008EE3D7 /* AccountModel.swift */; };
 		E4E1952F2B849182008EE3D7 /* ReissueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E1952E2B849182008EE3D7 /* ReissueModel.swift */; };
@@ -112,7 +112,7 @@
 		E4E195162B84909D008EE3D7 /* LockerManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerManagementViewModel.swift; sourceTree = "<group>"; };
 		E4E1951A2B8490D0008EE3D7 /* Color + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color + Extension.swift"; sourceTree = "<group>"; };
 		E4E1951E2B84910D008EE3D7 /* ErrorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorModel.swift; sourceTree = "<group>"; };
-		E4E195212B849127008EE3D7 /* Locker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locker.swift; sourceTree = "<group>"; };
+		E4E195212B849127008EE3D7 /* LockerInquiryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockerInquiryModel.swift; sourceTree = "<group>"; };
 		E4E195262B849145008EE3D7 /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		E4E195282B849150008EE3D7 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		E4E1952E2B849182008EE3D7 /* ReissueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReissueModel.swift; sourceTree = "<group>"; };
@@ -187,8 +187,6 @@
 				E4E194E72B848EF0008EE3D7 /* TabBar */,
 				E4E194E22B848EAB008EE3D7 /* Login */,
 				E4E194D52B848DC6008EE3D7 /* Main */,
-				E4E194C02B848C7D008EE3D7 /* MainViewController.swift */,
-				E4E194DA2B848E54008EE3D7 /* MainViewModel.swift */,
 				E4E194D12B848C97008EE3D7 /* App */,
 			);
 			path = SejongBucket;
@@ -218,6 +216,8 @@
 		E4E194D52B848DC6008EE3D7 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				E4E194C02B848C7D008EE3D7 /* MainViewController.swift */,
+				E4E194DA2B848E54008EE3D7 /* MainViewModel.swift */,
 				E4E194D82B848E0E008EE3D7 /* LockerInfo */,
 				E4E194D72B848E07008EE3D7 /* UserInfo */,
 				E4E194D62B848DD6008EE3D7 /* Payment */,
@@ -392,7 +392,7 @@
 		E4E195202B84911F008EE3D7 /* Reservation */ = {
 			isa = PBXGroup;
 			children = (
-				E4E195212B849127008EE3D7 /* Locker.swift */,
+				E4E195212B849127008EE3D7 /* LockerInquiryModel.swift */,
 			);
 			path = Reservation;
 			sourceTree = "<group>";
@@ -784,7 +784,7 @@
 				E4E195332B84919A008EE3D7 /* LoginModel.swift in Sources */,
 				E4E1950E2B849052008EE3D7 /* AddDepartViewModel.swift in Sources */,
 				E4E195022B848FE0008EE3D7 /* DepartManagementViewModel.swift in Sources */,
-				E4E195222B849127008EE3D7 /* Locker.swift in Sources */,
+				E4E195222B849127008EE3D7 /* LockerInquiryModel.swift in Sources */,
 				E4E1955F2B8492E9008EE3D7 /* LogoutService.swift in Sources */,
 				E4E194E42B848EB8008EE3D7 /* LoginViewController.swift in Sources */,
 				E4E194BF2B848C7D008EE3D7 /* SceneDelegate.swift in Sources */,
@@ -964,6 +964,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -991,6 +992,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

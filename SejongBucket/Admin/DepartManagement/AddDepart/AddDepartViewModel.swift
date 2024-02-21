@@ -21,7 +21,7 @@ class AddDepartViewModel {
     }
     func setBinding() {
         nameInputTrigger.flatMapLatest { [weak self] majorName -> Observable<DepartProduceServiceModel> in
-            guard let self = self else { return Observable.empty() }
+            guard self != nil else { return Observable.empty() }
             return DepartProduceService.requestProduce(majorName: majorName)
         }
         .subscribe(onNext: {[weak self] data in

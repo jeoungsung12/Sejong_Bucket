@@ -12,6 +12,15 @@ import RxSwift
 import RxCocoa
 
 class ReservationViewController : UIViewController {
+    private let disposeBag = DisposeBag()
+    private let reservationViewModel = ReservationViewModel()
+    //로딩인디케이터
+    private let loadingIndicator : UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.style = .large
+        view.color = .gray
+        return view
+    }()
     //학과 타이틀
     private let departLabel : UILabel = {
         let label = UILabel()
@@ -71,19 +80,20 @@ class ReservationViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        setLayout()
         setBinding()
+        setLayout()
     }
 }
 //MARK: - 레이아웃
 extension ReservationViewController {
     private func setLayout() {
+        print("레이아웃")
         self.view.addSubview(departLabel)
         self.view.addSubview(lockerLabel)
         self.view.addSubview(reservLabel)
         self.view.addSubview(refreshBtn)
-        let lockers : [[Locker]] = createDummyLockers(rows: 8, columns: 8)
-        displayLockers(lockers)
+        self.view.addSubview(loadingIndicator)
+//        test()
         self.view.addSubview(lockerScrollView)
         self.view.addSubview(reservBtn)
         departLabel.snp.makeConstraints { make in
@@ -107,8 +117,12 @@ extension ReservationViewController {
             make.trailing.equalToSuperview().offset(-10)
             make.top.equalTo(lockerLabel.snp.bottom).offset(25)
         }
+        loadingIndicator.snp.makeConstraints { make in
+            make.top.equalTo(refreshBtn.snp.bottom).offset((50))
+            make.leading.trailing.equalToSuperview().inset(0)
+        }
         lockerScrollView.snp.makeConstraints { make in
-            make.top.equalTo(reservLabel.snp.bottom).offset(30)
+            make.top.equalTo(loadingIndicator.snp.bottom).offset(0)
             make.leading.trailing.equalToSuperview().inset(0)
             make.height.equalToSuperview().dividedBy(2.3)
         }
@@ -117,54 +131,67 @@ extension ReservationViewController {
             make.bottom.equalToSuperview().offset(-self.view.frame.height / 7)
             make.height.equalTo(60)
         }
+        self.loadingIndicator.startAnimating()
     }
-    private func displayLockers(_ lockers: [[Locker]]){
-        //행
-        let VerticalStack = UIStackView()
-        VerticalStack.axis = .vertical
-        VerticalStack.spacing = 10
-        for (_, row) in lockers.enumerated() {
-            //열
-            let HorizontalStack = UIStackView()
-            HorizontalStack.axis = .horizontal
-            HorizontalStack.spacing = 10
-            for (_, locker) in row.enumerated() {
+    private func test() {
+        let Btn = UIButton()
+        Btn.backgroundColor = .black
+        lockerScrollView.addSubview(Btn)
+        Btn.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview().inset(0)
+        }
+        DispatchQueue.main.async{
+            self.loadingIndicator.stopAnimating()
+        }
+    }
+    private func displayLockers(_ lockersInfo: [LockerInfo]) {
+        let verticalStack = UIStackView()
+        verticalStack.axis = .vertical
+        verticalStack.spacing = 10
+        var index = 0
+        for lockerInfo in lockersInfo {
+            let horizontalStack = UIStackView()
+            horizontalStack.axis = .horizontal
+            horizontalStack.spacing = 10
+            
+            for lockerDetail in lockerInfo.lockerDetail {
                 let lockerButton = UIButton(type: .system)
-                lockerButton.setTitle("\(locker.row + 1)-\(locker.column + 1)", for: .normal)
-                lockerButton.backgroundColor = locker.isReserved ? .keyColor : .lightGray
-                lockerButton.tag = locker.id
+                let lockerTitle = "\(lockerDetail.row_num)-\(lockerDetail.column_num)"
+                lockerButton.setTitle(lockerTitle, for: .normal)
+                lockerButton.backgroundColor = lockerDetail.status == "NON_RESERVED" ? .red : .lightGray
+                lockerButton.tag = lockerDetail.id
                 lockerButton.layer.cornerRadius = 10
                 lockerButton.snp.makeConstraints { make in make.width.height.equalTo(60) }
                 lockerButton.setTitleColor(.black, for: .normal)
-                HorizontalStack.addArrangedSubview(lockerButton)
+                horizontalStack.addArrangedSubview(lockerButton)
             }
-            VerticalStack.addArrangedSubview(HorizontalStack)
+            print("사물함 갯수 \(index)")
+            index += 1
+            verticalStack.addArrangedSubview(horizontalStack)
         }
-        lockerScrollView.addSubview(VerticalStack)
-        VerticalStack.snp.makeConstraints { make in
+        lockerScrollView.addSubview(verticalStack)
+        verticalStack.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview().offset(-10)
             make.trailing.top.equalToSuperview().offset(10)
         }
-    }
-    // 더미 데이터로 묶은 사물함 배열 생성 함수 >> 아이디, 예약 가져오기
-    private func createDummyLockers(rows: Int, columns: Int) -> [[Locker]] {
-        var lockers = [[Locker]]()
-        var lockerId = 1
-        for row in 0..<rows {
-            var rowLockers = [Locker]()
-            for column in 0..<columns {
-                let locker = Locker(id: lockerId, row: row, column: column, isReserved: false)
-                rowLockers.append(locker)
-                lockerId += 1
-            }
-            lockers.append(rowLockers)
+        DispatchQueue.main.async{
+            self.loadingIndicator.stopAnimating()
         }
-        return lockers
     }
 }
 //MARK: - 바인딩
 extension ReservationViewController {
     private func setBinding() {
-        
+        reservationViewModel.LockerInquiry.onNext(())
+        reservationViewModel.LockerResult
+            .observe(on: MainScheduler.instance)
+            .subscribe { result in
+            if let lockerResult = result.element?.result {
+                if let lockersInfo = lockerResult.lockersInfo {
+                    self.displayLockers(lockersInfo)
+                }
+            }
+        }
+        .disposed(by: disposeBag)
     }
 }

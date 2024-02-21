@@ -92,6 +92,9 @@ extension TabBarViewController {
             .subscribe(onNext: {[weak self] logout in
                 if logout.status == 200 {
                     KeychainWrapper.standard.removeAllKeys()
+                    if let bundleIdentifier = Bundle.main.bundleIdentifier {
+                        UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+                    }
                     self?.navigationController?.pushViewController(LoginViewController(), animated: true)
                 }
             })

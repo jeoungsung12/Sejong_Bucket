@@ -114,3 +114,14 @@ extension AddDepartViewController {
         navigationController?.viewControllers.removeAll(where: { $0 is AddDepartViewController })
     }
 }
+extension AddDepartViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+}

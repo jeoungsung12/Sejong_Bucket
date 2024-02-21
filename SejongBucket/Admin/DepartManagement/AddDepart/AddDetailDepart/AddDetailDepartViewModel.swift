@@ -21,7 +21,7 @@ class AddDetailDepartViewModel {
     }
     func setBinding() {
         nameInputTrigger.flatMapLatest { [weak self] detailMajorInfo -> Observable<DetailProduceServiceModel> in
-            guard let self = self else { return Observable.empty() }
+            guard self != nil else { return Observable.empty() }
             return DetailDepartProduceService.requestProduce(detailMajor: detailMajorInfo)
         }
         .subscribe(onNext: {[weak self] data in

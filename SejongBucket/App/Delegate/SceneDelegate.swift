@@ -13,7 +13,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else {return}
         window = UIWindow(frame: UIScreen.main.bounds)
         if let accessToken = KeychainWrapper.standard.string(forKey: "JWTaccessToken"){
-            let viewController = LoginViewController()
+            print("Existing member, \(accessToken)")
+            let viewController = TabBarViewController()
             let navigationController = UINavigationController(rootViewController: viewController)
             window?.rootViewController = navigationController
         }else{
