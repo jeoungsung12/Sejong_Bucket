@@ -27,6 +27,7 @@ class ReservLockerService {
                             observer.onNext(data)
                             observer.onCompleted()
                         case .failure(let error):
+                            print("예약 에러 \(error)")
                             observer.onError(error)
                         }
                     }

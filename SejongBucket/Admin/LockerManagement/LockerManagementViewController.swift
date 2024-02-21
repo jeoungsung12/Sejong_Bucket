@@ -206,11 +206,12 @@ extension LockerManagementViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
-        let startReservationTime = dateFormatter.string(from: startPicker.date)
-        let endReservationTime = dateFormatter.string(from: endPicker.date)
         makeBtn.rx.tap
             .subscribe(onNext: { _ in
-                self.lockerManagementViewModel.inputTrigger.onNext(CreateLockerServiceModel(endReservationTime: endReservationTime, lockerName: "AI로봇학과 사물함", numberIncreaseDirection: "DOWN", startReservationTime: startReservationTime, totalColumn: self.columntext.text!, totalRow: self.rowtext.text!,userTiers: ["APPLICANT"]))
+                let startReservationTime = dateFormatter.string(from: self.startPicker.date)
+                let endReservationTime = dateFormatter.string(from: self.endPicker.date)
+                print("\(startReservationTime), \(endReservationTime)")
+                self.lockerManagementViewModel.inputTrigger.onNext(CreateLockerServiceModel(endReservationTime: endReservationTime, lockerName: "AI로봇학과 사물함", numberIncreaseDirection: "DOWN", startReservationTime: startReservationTime, totalColumn: self.columntext.text!, totalRow: self.rowtext.text!,userTiers: ["MEMBER"]))
             })
             .disposed(by: disposeBag)
         lockerManagementViewModel.outputResult
